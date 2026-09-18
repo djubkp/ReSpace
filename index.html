@@ -728,6 +728,206 @@ select {
   -webkit-text-fill-color: #000000 !important;
   text-shadow: none !important;
 }
+
+/* =========================
+   제안서 작성
+========================= */
+
+#proposalScreen {
+  background:
+    linear-gradient(
+      rgba(0,0,0,0.40),
+      rgba(0,0,0,0.62)
+    ),
+    url("work-bg.jpg")
+    center / cover
+    no-repeat;
+
+  color: #fff;
+}
+
+.proposal-inner {
+  width: min(100%, 680px);
+  margin: 0 auto;
+  padding: 18px 20px 40px;
+}
+
+.proposal-top-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.proposal-top-bar h1 {
+  margin: 0;
+  font-size: 22px;
+  letter-spacing: -0.8px;
+}
+
+.proposal-notice {
+  margin: 0 0 18px;
+  color: rgba(255,255,255,0.85);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.proposal-paper {
+  padding: 22px 18px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.proposal-paper h2 {
+  margin: 0 0 20px;
+  text-align: center;
+  font-size: 21px;
+}
+
+.proposal-field {
+  margin: 0 0 16px;
+}
+
+.proposal-field label,
+.proposal-field-title {
+  display: block;
+  margin-bottom: 7px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.proposal-field input,
+.proposal-field textarea,
+.proposal-field select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid rgba(255,255,255,0.45);
+  border-radius: 12px;
+  background: transparent;
+  color: #fff;
+  font-size: 15px;
+}
+
+.proposal-field textarea {
+  min-height: 130px;
+  resize: vertical;
+  line-height: 1.55;
+}
+
+.proposal-readonly {
+  padding: 12px;
+  border: 1px solid rgba(255,255,255,0.45);
+  border-radius: 12px;
+  background: transparent;
+  font-size: 14px;
+  line-height: 1.55;
+  white-space: pre-line;
+}
+
+.proposal-photo-wrap {
+  overflow: hidden;
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,0.45);
+  background: transparent;
+}
+
+.proposal-photo-wrap .upload-box {
+  min-height: 0;
+  width: 100%;
+  margin: 0;
+}
+
+.proposal-photo-wrap .delete-marker {
+  display: none;
+}
+
+#proposalMap {
+  width: 100%;
+  height: 220px;
+  border: 1px solid rgba(255,255,255,0.45);
+  border-radius: 18px;
+  overflow: hidden;
+}
+
+.optional-details {
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(255,255,255,0.28);
+}
+
+.optional-details summary {
+  cursor: pointer;
+  color: #fff;
+  font-size: 14px;
+}
+
+.proposal-actions {
+  display: grid;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.proposal-action {
+  min-height: 52px;
+  border: 1px solid rgba(255,255,255,0.45);
+  border-radius: 13px;
+  background: transparent;
+  color: #fff;
+  padding: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.download-proposal {
+  border-color: rgba(77,163,255,0.7);
+  background: rgba(77,163,255,0.94);
+  color: #fff;
+}
+
+.epeople-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.45);
+  color: #fff;
+  text-decoration: none;
+}
+
+#proposalScreen label,
+#proposalScreen p,
+#proposalScreen h1,
+#proposalScreen h2,
+#proposalScreen h3,
+#proposalScreen span,
+#proposalScreen summary {
+  color: #fff;
+}
+
+#proposalScreen .back-button {
+  color: #fff;
+}
+
+#proposalScreen .proposal-field input::placeholder,
+#proposalScreen .proposal-field textarea::placeholder {
+  color: rgba(255,255,255,0.65);
+}
+
+#proposalScreen .proposal-field select option {
+  background: #333;
+  color: #fff;
+}
+
+@media print {
+  body { overflow: visible; background: #fff; }
+  #mainScreen, #workScreen, .proposal-top-bar, .proposal-notice, .proposal-actions { display: none !important; }
+  #proposalScreen { position: static; display: block !important; overflow: visible; background: #fff; }
+  .proposal-inner { max-width: none; padding: 0; }
+  .proposal-paper { border: 0; box-shadow: none; }
+}
 </style>
 </head>
 
@@ -977,8 +1177,92 @@ select {
       class="next-button"
       onclick="nextStep()"
     >
-      제안 내용 확인하기
+      제안서 작성하기
     </button>
+
+  </div>
+
+</section>
+
+
+<!-- =================================
+     제안서 작성
+================================= -->
+
+<section
+  id="proposalScreen"
+  class="screen hidden"
+>
+
+  <div class="proposal-inner">
+
+    <div class="proposal-top-bar">
+      <button class="back-button" onclick="backToWork()" aria-label="작업 화면으로 돌아가기">‹</button>
+    </div>
+
+    <div class="proposal-paper" id="proposalPaper">
+      <h2>공간 개선 제안서</h2>
+
+      <div class="proposal-field">
+        <label for="proposalTitle">민원·제안 제목</label>
+        <input id="proposalTitle" type="text" placeholder="예: ○○골목 보행 안전을 위한 가로등 설치 제안">
+      </div>
+
+      <div class="proposal-field">
+        <span class="proposal-field-title">개선 위치</span>
+        <div class="proposal-readonly" id="proposalLocation"></div>
+      </div>
+
+      <div class="proposal-field">
+        <span class="proposal-field-title">지도에서 설정한 위치</span>
+        <div id="proposalMap" aria-label="선택한 개선 위치 지도"></div>
+      </div>
+
+      <div class="proposal-field">
+        <span class="proposal-field-title">사진 및 개선 표시</span>
+        <div class="proposal-photo-wrap" id="proposalPhoto"></div>
+      </div>
+
+      <div class="proposal-field">
+        <span class="proposal-field-title">개선 항목</span>
+        <div class="proposal-readonly" id="proposalMarkers"></div>
+      </div>
+
+      <div class="proposal-field">
+        <label for="proposalDetail">상세 개선내용</label>
+        <textarea id="proposalDetail" placeholder="불편한 점, 개선이 필요한 이유, 기대 효과를 구체적으로 작성해주세요.&#10;&#10;예: 이 골목은 밤에 너무 어두워 보행 시 불안합니다. 보행 안전을 위해 가로등을 설치해 주시기 바랍니다."></textarea>
+      </div>
+
+      <details class="optional-details">
+        <summary>신청인 정보 직접 입력하기 (선택)</summary>
+        <div class="proposal-field">
+          <label for="applicantName">성명</label>
+          <input id="applicantName" type="text" autocomplete="name" placeholder="직접 입력">
+        </div>
+        <div class="proposal-field">
+          <label for="applicantAddress">주소</label>
+          <input id="applicantAddress" type="text" autocomplete="street-address" placeholder="직접 입력">
+        </div>
+        <div class="proposal-field">
+          <label for="applicantContact">연락처 또는 전자우편</label>
+          <input id="applicantContact" type="text" autocomplete="email" placeholder="직접 입력">
+        </div>
+        <div class="proposal-field">
+          <label for="noticeMethod">희망 통지방식</label>
+          <select id="noticeMethod">
+            <option value="">선택 안 함</option>
+            <option>전자우편</option>
+            <option>문자메시지</option>
+            <option>서면</option>
+          </select>
+        </div>
+      </details>
+    </div>
+
+    <div class="proposal-actions">
+      <button class="proposal-action download-proposal" onclick="downloadProposal()">제안서 저장·다운로드</button>
+      <a class="proposal-action epeople-link" href="https://www.epeople.go.kr/" target="_blank" rel="noopener">국민신문고에서 민원 신청하기</a>
+    </div>
 
   </div>
 
@@ -995,6 +1279,10 @@ select {
 ================================= */
 
 let map = null;
+
+let proposalMap = null;
+
+let proposalLocationMarker = null;
 
 let selectedLatitude = null;
 
@@ -1886,17 +2174,253 @@ function nextStep() {
   }
 
 
-  alert(
-    "제안 내용이 준비되었습니다\n\n" +
-    "개선사항: " +
-    problem +
-    "\n" +
-    "위치: " +
-    (
-      selectedAddress ||
-      "선택한 지도 위치"
-    )
-  );
+  openProposalScreen(problem);
+
+}
+
+
+/* =================================
+   제안서 작성
+================================= */
+
+function openProposalScreen(problem) {
+
+  const location =
+    selectedAddress ||
+    "선택한 지도 위치";
+
+
+  document
+    .getElementById("proposalLocation")
+    .textContent =
+    location;
+
+
+  const markerTexts =
+    markers.map(
+      (marker, index) =>
+        (index + 1) + ". " +
+        marker.querySelector(".marker-label").textContent
+    );
+
+
+  document
+    .getElementById("proposalMarkers")
+    .textContent =
+    markerTexts.join("\n");
+
+
+  const title =
+    document.getElementById("proposalTitle");
+
+
+  if (!title.value.trim()) {
+
+    title.value =
+      problem + " 관련 공간 개선 제안";
+
+  }
+
+
+  const proposalPhoto =
+    document.getElementById("proposalPhoto");
+
+
+  proposalPhoto.innerHTML = "";
+
+
+  const photoCopy =
+    document.getElementById("uploadBox").cloneNode(true);
+
+
+  photoCopy.id = "proposalImageCopy";
+
+
+  photoCopy
+    .querySelectorAll(".delete-marker")
+    .forEach(button => button.remove());
+
+
+  proposalPhoto.appendChild(photoCopy);
+
+
+  document
+    .getElementById("workScreen")
+    .classList.remove("visible");
+
+  document
+    .getElementById("workScreen")
+    .classList.add("hidden");
+
+  document
+    .getElementById("proposalScreen")
+    .classList.remove("hidden");
+
+  document
+    .getElementById("proposalScreen")
+    .classList.add("visible");
+
+
+  setTimeout(updateProposalMap, 450);
+
+}
+
+
+function updateProposalMap() {
+
+  const position =
+    [selectedLatitude, selectedLongitude];
+
+
+  if (!proposalMap) {
+
+    proposalMap =
+      L.map("proposalMap", {
+        zoomControl: false,
+        attributionControl: true
+      })
+      .setView(position, 17);
+
+
+    L.tileLayer(
+      "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+      {
+        maxZoom: 19,
+        attribution: "&copy; OpenStreetMap"
+      }
+    ).addTo(proposalMap);
+
+  } else {
+
+    proposalMap.setView(position, 17);
+
+  }
+
+
+  if (proposalLocationMarker) {
+    proposalLocationMarker.remove();
+  }
+
+
+  proposalLocationMarker =
+    L.marker(position)
+      .addTo(proposalMap)
+      .bindPopup("선택한 개선 위치");
+
+
+  proposalMap.invalidateSize();
+
+}
+
+
+function backToWork() {
+
+  document
+    .getElementById("proposalScreen")
+    .classList.remove("visible");
+
+  document
+    .getElementById("proposalScreen")
+    .classList.add("hidden");
+
+  document
+    .getElementById("workScreen")
+    .classList.remove("hidden");
+
+  document
+    .getElementById("workScreen")
+    .classList.add("visible");
+
+
+  if (map) {
+    setTimeout(() => map.invalidateSize(), 450);
+  }
+
+}
+
+
+function proposalValue(id) {
+
+  return document
+    .getElementById(id)
+    .value
+    .trim();
+
+}
+
+
+function downloadProposal() {
+
+  const detail = proposalValue("proposalDetail");
+
+
+  if (!detail) {
+    alert("상세 개선내용을 작성해주세요");
+    return;
+  }
+
+
+  const title = proposalValue("proposalTitle");
+
+  const optionalInfo = [
+    ["성명", proposalValue("applicantName")],
+    ["주소", proposalValue("applicantAddress")],
+    ["연락처 또는 전자우편", proposalValue("applicantContact")],
+    ["희망 통지방식", proposalValue("noticeMethod")]
+  ].filter(item => item[1]);
+
+
+  const savedPhoto =
+    document
+      .getElementById("proposalPhoto")
+      .innerHTML;
+
+
+  const style =
+    Array.from(document.styleSheets)
+      .map(sheet => {
+        try {
+          return Array.from(sheet.cssRules)
+            .map(rule => rule.cssText)
+            .join("\n");
+        } catch (error) {
+          return "";
+        }
+      })
+      .join("\n");
+
+
+  const safe = value =>
+    value.replace(/[&<>\"']/g, character => ({
+      "&": "&amp;", "<": "&lt;", ">": "&gt;",
+      "\"": "&quot;", "'": "&#39;"
+    })[character]);
+
+
+  const documentHtml = `<!DOCTYPE html>
+<html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>${safe(title || "공간 개선 제안서")}</title>
+<style>${style}
+html,body{height:auto!important;min-height:100%;overflow:visible!important}body{margin:0;padding:24px;background:#f6f4ef;font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;color:#1d1d1d}.saved-paper{max-width:680px;margin:auto;padding:24px;background:#fff;border:1px solid #d8d4cb;border-radius:14px}.saved-paper h1{text-align:center;font-size:22px}.saved-row{margin:20px 0}.saved-label{display:block;margin-bottom:7px;font-weight:700;font-size:14px}.saved-content{padding:12px;border:1px solid #e2ded6;border-radius:8px;background:#faf9f6;white-space:pre-wrap;line-height:1.55}.proposal-photo-wrap .upload-box{display:block;position:relative;overflow:hidden}.proposal-photo-wrap #previewImage{display:block;width:100%;height:auto}.proposal-photo-wrap .upload-placeholder{display:none}@media print{body{padding:0;background:#fff}.saved-paper{max-width:none;border:0;box-shadow:none}}
+</style></head><body><main class="saved-paper"><h1>공간 개선 제안서</h1>
+<div class="saved-row"><span class="saved-label">민원·제안 제목</span><div class="saved-content">${safe(title)}</div></div>
+<div class="saved-row"><span class="saved-label">개선 위치</span><div class="saved-content">${safe(document.getElementById("proposalLocation").textContent)}</div></div>
+<div class="saved-row"><span class="saved-label">사진 및 개선 표시</span><div class="proposal-photo-wrap">${savedPhoto}</div></div>
+<div class="saved-row"><span class="saved-label">개선 항목</span><div class="saved-content">${safe(document.getElementById("proposalMarkers").textContent)}</div></div>
+<div class="saved-row"><span class="saved-label">상세 개선내용</span><div class="saved-content">${safe(detail)}</div></div>
+${optionalInfo.length ? `<div class="saved-row"><span class="saved-label">신청인 정보 (사용자 입력)</span><div class="saved-content">${optionalInfo.map(item => safe(item[0]) + ": " + safe(item[1])).join("\n")}</div></div>` : ""}
+</main></body></html>`;
+
+
+  const blob =
+    new Blob([documentHtml], { type: "text/html;charset=utf-8" });
+
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = "ReSpace_공간개선_제안서.html";
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(link.href);
 
 }
 
