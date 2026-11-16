@@ -872,53 +872,108 @@ a:hover { color: var(--accent-dark); }
 .done-title h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.6px; }
 .done-title p { font-size: 14px; color: var(--sub); }
 
+/* 공문서형 제안서 */
 .doc {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  padding: 22px 18px;
+  padding: 28px 14px 26px;
   border: 1px solid var(--line-soft);
   border-radius: 16px;
   background: var(--white);
   box-shadow: 0 6px 20px rgba(0,0,0,.06);
+  color: #111;
 }
 
-.doc h2 { text-align: center; font-size: 19px; font-weight: 700; }
-
-.doc-date {
-  margin-top: -10px;
+.doc-title {
+  margin: 0 0 22px;
+  padding-left: .6em;               /* 자간 때문에 생기는 오른쪽 쏠림 보정 */
   text-align: center;
-  font-size: 12px;
-  color: var(--sub);
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: .6em;
 }
 
-.doc-row { display: flex; flex-direction: column; gap: 6px; }
-.doc-label { font-size: 12px; font-weight: 700; }
+.doc-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  border-top: 2px solid #111;
+  border-bottom: 2px solid #111;
+  font-size: 13px;
+  line-height: 1.55;
+}
 
-.doc-value {
-  padding: 10px 12px;
-  border-radius: 10px;
-  background: var(--bg);
-  font-size: 14px;
-  line-height: 1.6;
-  white-space: pre-wrap;
+.doc-table th,
+.doc-table td {
+  border: 1px solid #555;
+  padding: 8px;
+  vertical-align: middle;
   word-break: keep-all;
   overflow-wrap: anywhere;
 }
 
-.doc-photo {
-  border-radius: 10px;
-  overflow: hidden;
-  background: var(--block);
+.doc-table tr:first-child th,
+.doc-table tr:first-child td { border-top: 0; }
+
+.doc-table th {
+  background: #EDEDEB;
+  font-size: 12px;
+  font-weight: 700;
+  text-align: center;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
 }
 
+.doc-table td.tall {
+  height: 120px;
+  vertical-align: top;
+  white-space: pre-wrap;
+}
+
+.doc-table td.media { padding: 0; }
+
+.doc-check {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px 10px;
+  font-size: 12px;
+}
+
+@media (min-width: 420px) {
+  .doc-check { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+.doc-check .on { font-weight: 700; }
+
+.doc-photo { background: var(--block); }
 .doc-photo .photo-stage img { width: 100%; height: auto; }
 
+.doc-items {
+  padding: 8px;
+  border-top: 1px solid #555;
+  font-size: 12px;
+}
+
 .doc-map {
-  height: 180px;
-  border-radius: 10px;
-  overflow: hidden;
+  height: 160px;
   background: #E9E9E4;
+}
+
+.doc-coords { display: block; margin-top: 2px; font-size: 11px; color: #555; }
+
+.doc-sign {
+  margin-top: 24px;
+  font-size: 14px;
+  line-height: 2;
+  text-align: center;
+}
+
+.doc-sign .sign-name { text-align: right; }
+
+.doc-sign .sign-blank {
+  display: inline-block;
+  min-width: 90px;
+  border-bottom: 1px solid #111;
+  text-align: center;
+  line-height: 1.6;
 }
 
 .done-actions { display: flex; flex-direction: column; gap: 10px; }
@@ -1000,14 +1055,12 @@ a:hover { color: var(--accent-dark); }
 
   .no-print, .toast { display: none !important; }
 
-  .doc { border: 0; box-shadow: none; padding: 0; }
+  .doc { border: 0; border-radius: 0; box-shadow: none; padding: 0; }
 
-  .doc-value {
-    background: #fff;
-    border: 1px solid #ddd;
-  }
-
-  .doc-row { break-inside: avoid; }
+  .doc-table { font-size: 11pt; }
+  .doc-table th { font-size: 10.5pt; }
+  .doc-table tr { break-inside: avoid; }
+  .doc-check { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 </style>
 </head>
@@ -1237,23 +1290,47 @@ a:hover { color: var(--accent-dark); }
     </div>
 
     <div class="field">
-      <label for="detailInput">상세 내용 <span class="required">*</span></label>
+      <label for="problemInput">현황 및 문제점 <span class="required">*</span></label>
       <div class="example-row">
-        <span>예시 문장 넣기</span>
-        <button type="button" class="chip" data-example="이곳은 밤이 되면 너무 어두워 지나다니기 불안합니다.">밤에 어두워요</button>
-        <button type="button" class="chip" data-example="주변에 잠시 앉아 쉴 수 있는 공간이 없어 불편합니다.">쉴 곳이 없어요</button>
-        <button type="button" class="chip" data-example="보행로 상태가 좋지 않아 넘어지거나 다칠 위험이 있습니다.">보행이 위험해요</button>
+        <span>예시 넣기</span>
+        <button type="button" class="chip" data-target="problemInput" data-example="이곳은 밤이 되면 조명이 부족해 매우 어둡고, 보행자가 지나다니기 불안합니다.">밤에 어두워요</button>
+        <button type="button" class="chip" data-target="problemInput" data-example="주변에 잠시 앉아 쉴 수 있는 시설이 없어 노약자 등 보행자가 불편을 겪고 있습니다.">쉴 곳이 없어요</button>
+        <button type="button" class="chip" data-target="problemInput" data-example="보도 상태가 고르지 않아 보행자가 걸려 넘어지거나 다칠 위험이 있습니다.">보행이 위험해요</button>
       </div>
-      <textarea class="textarea" id="detailInput" maxlength="1000"
-        placeholder="불편한 점, 개선이 필요한 이유, 기대 효과를 적어주세요"></textarea>
-      <div class="counter"><span id="detailCount">0</span> / 1000</div>
+      <textarea class="textarea" id="problemInput" maxlength="600" data-counter="problemCount"
+        placeholder="지금 어떤 상태이고 무엇이 불편한지 적어주세요"></textarea>
+      <div class="counter"><span id="problemCount">0</span> / 600</div>
+    </div>
+
+    <div class="field">
+      <label for="contentInput">제안 내용 <span class="required">*</span></label>
+      <div class="example-row">
+        <span>예시 넣기</span>
+        <button type="button" class="chip" data-target="contentInput" data-fill="items">표시한 항목으로 채우기</button>
+      </div>
+      <textarea class="textarea" id="contentInput" maxlength="600" data-counter="contentCount"
+        placeholder="어떻게 개선해 주기를 바라는지 적어주세요&#10;예: 해당 위치에 벤치 2개를 설치해 주시기 바랍니다."></textarea>
+      <div class="counter"><span id="contentCount">0</span> / 600</div>
+    </div>
+
+    <div class="field">
+      <label for="effectInput">기대 효과</label>
+      <div class="example-row">
+        <span>예시 넣기</span>
+        <button type="button" class="chip" data-target="effectInput" data-example="야간 보행 안전이 향상되고 범죄 예방에 도움이 됩니다.">안전 향상</button>
+        <button type="button" class="chip" data-target="effectInput" data-example="주민과 보행자의 휴식 공간이 확보되어 생활 편의가 높아집니다.">편의 향상</button>
+        <button type="button" class="chip" data-target="effectInput" data-example="보행 중 사고 위험이 줄어들어 안전한 통행 환경이 조성됩니다.">사고 예방</button>
+      </div>
+      <textarea class="textarea" id="effectInput" maxlength="400" data-counter="effectCount"
+        placeholder="개선되면 어떤 점이 좋아지는지 적어주세요 (선택)"></textarea>
+      <div class="counter"><span id="effectCount">0</span> / 400</div>
     </div>
 
     <details class="fold">
       <summary>
         <span class="fold-title">
           <strong>신청인 정보</strong>
-          <span>선택 · 성명, 주소, 연락처, 통지방식</span>
+          <span>선택 · 제안서의 제안자 칸에 들어가요</span>
         </span>
         <svg class="fold-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
       </summary>
@@ -1313,42 +1390,74 @@ a:hover { color: var(--accent-dark); }
     </div>
 
     <article class="doc" id="previewDoc">
-      <h2>공간 개선 제안서</h2>
-      <p class="doc-date" id="docDate"></p>
+      <h2 class="doc-title">공간 개선 제안서</h2>
 
-      <div class="doc-row">
-        <span class="doc-label">제목</span>
-        <div class="doc-value" id="docTitle"></div>
-      </div>
+      <table class="doc-table">
+        <colgroup>
+          <col style="width: 21%">
+          <col style="width: 29%">
+          <col style="width: 21%">
+          <col style="width: 29%">
+        </colgroup>
+        <tbody>
+          <tr>
+            <th scope="row">제 안 자</th>
+            <td id="docName"></td>
+            <th scope="row">제안일자</th>
+            <td id="docDate"></td>
+          </tr>
+          <tr>
+            <th scope="row">연 락 처</th>
+            <td id="docContact"></td>
+            <th scope="row">통지방식</th>
+            <td id="docNotice"></td>
+          </tr>
+          <tr>
+            <th scope="row">주 소</th>
+            <td colspan="3" id="docAddress"></td>
+          </tr>
+          <tr>
+            <th scope="row">제 목</th>
+            <td colspan="3" id="docTitle"></td>
+          </tr>
+          <tr>
+            <th scope="row">제안 위치</th>
+            <td colspan="3" id="docLocation"></td>
+          </tr>
+          <tr>
+            <th scope="row">제안 분류</th>
+            <td colspan="3"><div class="doc-check" id="docCheck"></div></td>
+          </tr>
+          <tr>
+            <th scope="row">현장 사진</th>
+            <td colspan="3" class="media">
+              <div class="doc-photo" id="docPhoto"></div>
+              <div class="doc-items" id="docItems"></div>
+            </td>
+          </tr>
+          <tr>
+            <th scope="row">위치 지도</th>
+            <td colspan="3" class="media"><div class="doc-map" id="docMap"></div></td>
+          </tr>
+          <tr>
+            <th scope="row">현황 및<br>문제점</th>
+            <td colspan="3" class="tall" id="docProblem"></td>
+          </tr>
+          <tr>
+            <th scope="row">제안 내용</th>
+            <td colspan="3" class="tall" id="docContent"></td>
+          </tr>
+          <tr>
+            <th scope="row">기대 효과</th>
+            <td colspan="3" class="tall" id="docEffect"></td>
+          </tr>
+        </tbody>
+      </table>
 
-      <div class="doc-row">
-        <span class="doc-label">개선 위치</span>
-        <div class="doc-value" id="docLocation"></div>
-      </div>
-
-      <div class="doc-row">
-        <span class="doc-label">사진 및 개선 표시</span>
-        <div class="doc-photo" id="docPhoto"></div>
-      </div>
-
-      <div class="doc-row">
-        <span class="doc-label">지도</span>
-        <div class="doc-map" id="docMap"></div>
-      </div>
-
-      <div class="doc-row">
-        <span class="doc-label">개선 항목</span>
-        <div class="doc-value" id="docItems"></div>
-      </div>
-
-      <div class="doc-row">
-        <span class="doc-label">상세 내용</span>
-        <div class="doc-value" id="docDetail"></div>
-      </div>
-
-      <div class="doc-row" id="docApplicantRow" hidden>
-        <span class="doc-label">신청인 정보</span>
-        <div class="doc-value" id="docApplicant"></div>
+      <div class="doc-sign">
+        <p>위와 같이 공간 개선을 제안합니다.</p>
+        <p id="docSignDate"></p>
+        <p class="sign-name">제안자 <span class="sign-blank" id="docSignName"></span> (서명)</p>
       </div>
     </article>
 
@@ -1830,20 +1939,33 @@ $("titleInput").addEventListener("input", function () {
   state.titleEdited = this.value.trim() !== "";
 });
 
-document.querySelectorAll("[data-example]").forEach(chip => {
-  chip.addEventListener("click", () => {
-    const area = $("detailInput");
-    const sentence = chip.dataset.example;
-    const next = area.value.trim() ? area.value.replace(/\s*$/, "") + "\n" + sentence : sentence;
+/* 예시 문장 넣기 칩 */
+function appendText(area, sentence) {
+  const max = Number(area.getAttribute("maxlength")) || 1000;
+  const next = area.value.trim() ? area.value.replace(/\s*$/, "") + "\n" + sentence : sentence;
 
-    area.value = next.slice(0, 1000);
-    area.dispatchEvent(new Event("input"));
-    area.focus();
+  area.value = next.slice(0, max);
+  area.dispatchEvent(new Event("input"));
+  area.focus();
+}
+
+document.querySelectorAll("[data-target]").forEach(chip => {
+  chip.addEventListener("click", () => {
+    const area = $(chip.dataset.target);
+
+    if (chip.dataset.fill === "items") {
+      appendText(area, "해당 위치에 " + uniqueLabels().join(", ") + " 조치를 요청드립니다.");
+    } else {
+      appendText(area, chip.dataset.example);
+    }
   });
 });
 
-$("detailInput").addEventListener("input", function () {
-  $("detailCount").textContent = this.value.length;
+/* 글자 수 표시 */
+document.querySelectorAll("textarea[data-counter]").forEach(area => {
+  area.addEventListener("input", () => {
+    $(area.dataset.counter).textContent = area.value.length;
+  });
 });
 
 function val(id) {
@@ -1858,6 +1980,8 @@ function applicantLines() {
     ["희망 통지방식", val("noticeMethod")]
   ].filter(row => row[1]).map(row => row[0] + ": " + row[1]);
 }
+
+const TEXT_FIELDS = ["problemInput", "contentInput", "effectInput"];
 
 
 /* =========================================
@@ -1875,22 +1999,74 @@ function locationText() {
   return state.address + "\n" + coordText(state.lat, state.lng);
 }
 
+function todayText() {
+  const d = new Date();
+  return d.getFullYear() + ". " + (d.getMonth() + 1) + ". " + d.getDate() + ".";
+}
+
+/* 제안 분류 체크박스: 표시한 항목은 ■, 나머지는 □ */
+function renderCategories() {
+  const box = $("docCheck");
+  box.innerHTML = "";
+
+  const used = new Set(state.markers.map(m => m.label));
+  const known = new Set(TYPES.map(t => t[1]));
+  const others = [...used].filter(label => !known.has(label));
+
+  TYPES.forEach(([, value]) => {
+    const item = document.createElement("span");
+    const on = used.has(value);
+    item.className = on ? "on" : "";
+    item.textContent = (on ? "■ " : "□ ") + value;
+    box.appendChild(item);
+  });
+
+  const etc = document.createElement("span");
+  etc.className = others.length ? "on" : "";
+  etc.textContent = (others.length ? "■ " : "□ ") + "기타(" + (others.join(", ") || "      ") + ")";
+  box.appendChild(etc);
+}
+
 function openPreview() {
-  if (!val("detailInput")) {
-    toast("상세 내용을 적어주세요");
-    $("detailInput").focus();
+  if (!val("problemInput")) {
+    toast("현황 및 문제점을 적어주세요");
+    $("problemInput").focus();
     return;
   }
 
-  $("docDate").textContent = "작성일 " + new Date().toLocaleDateString("ko-KR");
-  $("docTitle").textContent = proposalTitle();
-  $("docLocation").textContent = locationText();
-  $("docItems").textContent = itemsText();
-  $("docDetail").textContent = val("detailInput");
+  if (!val("contentInput")) {
+    toast("제안 내용을 적어주세요");
+    $("contentInput").focus();
+    return;
+  }
 
-  const applicant = applicantLines();
-  $("docApplicantRow").hidden = applicant.length === 0;
-  $("docApplicant").textContent = applicant.join("\n");
+  // 제안자 정보 (비어 있으면 빈칸으로 둠)
+  $("docName").textContent = val("applicantName");
+  $("docContact").textContent = val("applicantContact");
+  $("docNotice").textContent = val("noticeMethod");
+  $("docAddress").textContent = val("applicantAddress");
+  $("docDate").textContent = todayText();
+
+  $("docTitle").textContent = proposalTitle();
+
+  $("docLocation").innerHTML = "";
+  $("docLocation").append(state.address);
+  const coords = document.createElement("span");
+  coords.className = "doc-coords";
+  coords.textContent = coordText(state.lat, state.lng);
+  $("docLocation").appendChild(coords);
+
+  renderCategories();
+
+  $("docItems").textContent = state.markers
+    .map((m, i) => "(" + (i + 1) + ") " + m.label).join("   ");
+
+  $("docProblem").textContent = val("problemInput");
+  $("docContent").textContent = val("contentInput");
+  $("docEffect").textContent = val("effectInput");
+
+  $("docSignDate").textContent = todayText();
+  $("docSignName").textContent = val("applicantName");
 
   // 사진 + 마커 (읽기 전용)
   const box = $("docPhoto");
@@ -1924,16 +2100,22 @@ async function copyProposal() {
     "■ 제목",
     proposalTitle(),
     "",
-    "■ 개선 위치",
+    "■ 제안 위치",
     locationText(),
     "",
-    "■ 개선 항목",
+    "■ 제안 항목",
     itemsText(),
     "",
-    "■ 상세 내용",
-    val("detailInput"),
-    applicant.length ? "\n■ 신청인 정보\n" + applicant.join("\n") : ""
-  ].join("\n").trim();
+    "■ 현황 및 문제점",
+    val("problemInput"),
+    "",
+    "■ 제안 내용",
+    val("contentInput"),
+    val("effectInput") ? "\n■ 기대 효과\n" + val("effectInput") : "",
+    applicant.length ? "\n■ 제안자 정보\n" + applicant.join("\n") : "",
+    "",
+    "제안일자: " + todayText()
+  ].join("\n").replace(/\n{3,}/g, "\n\n").trim();
 
   try {
     await navigator.clipboard.writeText(text);
@@ -1965,9 +2147,9 @@ function restart() {
   selectType(null);
   $("directInput").value = "";
 
-  ["titleInput", "detailInput", "applicantName", "applicantAddress", "applicantContact", "noticeMethod"]
+  ["titleInput", ...TEXT_FIELDS, "applicantName", "applicantAddress", "applicantContact", "noticeMethod"]
     .forEach(id => { $(id).value = ""; });
-  $("detailCount").textContent = "0";
+  ["problemCount", "contentCount", "effectCount"].forEach(id => { $(id).textContent = "0"; });
   document.querySelector(".fold").open = false;
 
   go("mainScreen");
