@@ -204,7 +204,7 @@ a:hover { color: var(--accent-dark); }
 ========================================= */
 #mainScreen {
   background:
-    linear-gradient(180deg, rgba(0,0,0,.35) 0%, rgba(0,0,0,.10) 35%, rgba(0,0,0,.78) 100%),
+    linear-gradient(180deg, rgba(0,0,0,.35) 0%, rgba(0,0,0,.25) 50%, rgba(0,0,0,.70) 100%),
     url("main.jpg") center / cover no-repeat,
     #2B2B29;
   color: var(--white);
@@ -218,9 +218,18 @@ a:hover { color: var(--accent-dark); }
   padding: 24px 24px calc(32px + var(--safe-bottom));
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  gap: 40px;
 }
+
+/* 가운데 영역: 위아래 남는 공간을 똑같이 나눠 가져서 화면 중앙에 옴 */
+.main-center {
+  margin: auto 0;
+  padding: 40px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+#mainScreen .bottom { margin-top: 0; }
 
 .logo {
   height: 44px;
@@ -231,12 +240,10 @@ a:hover { color: var(--accent-dark); }
   letter-spacing: -0.5px;
 }
 
-.main-bottom { display: flex; flex-direction: column; gap: 24px; }
-
 .main-copy { display: flex; flex-direction: column; gap: 10px; }
 
 .main-copy h1 {
-  font-size: 30px;
+  font-size: clamp(30px, 8vw, 40px);   /* 화면이 넓으면 글씨도 커짐 */
   line-height: 1.3;
   font-weight: 700;
   letter-spacing: -1px;
@@ -1014,7 +1021,7 @@ a:hover { color: var(--accent-dark); }
   <div class="main-inner">
     <div class="logo">ReSpace</div>
 
-    <div class="main-bottom">
+    <div class="main-center">
       <div class="main-copy">
         <h1>불편한 공간,<br>더 나은 공간으로</h1>
         <p>사진 한 장으로 생활 속 불편을 알리고<br>개선 제안서를 만들어요</p>
@@ -1025,11 +1032,11 @@ a:hover { color: var(--accent-dark); }
         <li><b>2</b>위치 표시</li>
         <li><b>3</b>제안서 저장</li>
       </ol>
+    </div>
 
-      <div class="bottom">
-        <button class="btn-primary" onclick="go('photoScreen')">시작하기</button>
-        <p class="main-note">로그인 없이 바로 사용할 수 있어요</p>
-      </div>
+    <div class="bottom">
+      <button class="btn-primary" onclick="go('photoScreen')">시작하기</button>
+      <p class="main-note">로그인 없이 바로 사용할 수 있어요</p>
     </div>
   </div>
 </section>
