@@ -226,67 +226,26 @@ a:hover { color: var(--accent-dark); }
   padding: 40px 0;
   display: flex;
   flex-direction: column;
-  gap: 28px;
+  align-items: center;
+  gap: 14px;
+  text-align: center;
+}
+
+.main-logo {
+  font-size: clamp(46px, 14vw, 64px);   /* 화면이 넓으면 로고도 커짐 */
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -1.5px;
+}
+
+.main-slogan {
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.5;
+  color: rgba(255,255,255,.92);
 }
 
 #mainScreen .bottom { margin-top: 0; }
-
-.logo {
-  height: 44px;
-  display: flex;
-  align-items: center;
-  font-size: 20px;
-  font-weight: 700;
-  letter-spacing: -0.5px;
-}
-
-.main-copy { display: flex; flex-direction: column; gap: 10px; }
-
-.main-copy h1 {
-  font-size: clamp(30px, 8vw, 40px);   /* 화면이 넓으면 글씨도 커짐 */
-  line-height: 1.3;
-  font-weight: 700;
-  letter-spacing: -1px;
-}
-
-.main-copy p {
-  font-size: 15px;
-  line-height: 1.6;
-  color: rgba(255,255,255,.88);
-}
-
-.main-steps {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 8px;
-}
-
-.main-steps li {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  padding: 14px 6px;
-  border: 1px solid rgba(255,255,255,.35);
-  border-radius: 14px;
-  background: rgba(255,255,255,.08);
-  -webkit-backdrop-filter: blur(6px);
-  backdrop-filter: blur(6px);
-  font-size: 13px;
-  font-weight: 500;
-}
-
-.main-steps b {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background: var(--white);
-  color: var(--ink);
-  font-size: 13px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
 
 .main-note {
   text-align: center;
@@ -727,6 +686,8 @@ a:hover { color: var(--accent-dark); }
 
 .loc-address.loading { color: var(--sub); font-weight: 500; }
 
+.loc-card .text-input { flex: none; }
+
 
 /* =========================================
    05 제안서 작성
@@ -847,9 +808,8 @@ a:hover { color: var(--accent-dark); }
   padding: 4px 16px 18px;
 }
 
-.fold-body .field > label { font-size: 13px; font-weight: 500; }
-
-.fold-body select.text-input { appearance: none; -webkit-appearance: none; }
+.fold-body .field > label,
+.fold-body .field-label { font-size: 13px; font-weight: 500; }
 
 .privacy-note {
   display: flex;
@@ -966,16 +926,6 @@ a:hover { color: var(--accent-dark); }
   text-align: center;
 }
 
-.doc-sign .sign-name { text-align: right; }
-
-.doc-sign .sign-blank {
-  display: inline-block;
-  min-width: 90px;
-  border-bottom: 1px solid #111;
-  text-align: center;
-  line-height: 1.6;
-}
-
 .done-actions { display: flex; flex-direction: column; gap: 10px; }
 
 .done-actions .two {
@@ -1072,19 +1022,9 @@ a:hover { color: var(--accent-dark); }
 ===================================== -->
 <section id="mainScreen" class="screen visible">
   <div class="main-inner">
-    <div class="logo">ReSpace</div>
-
     <div class="main-center">
-      <div class="main-copy">
-        <h1>불편한 공간,<br>더 나은 공간으로</h1>
-        <p>사진 한 장으로 생활 속 불편을 알리고<br>개선 제안서를 만들어요</p>
-      </div>
-
-      <ol class="main-steps">
-        <li><b>1</b>사진 찍기</li>
-        <li><b>2</b>위치 표시</li>
-        <li><b>3</b>제안서 저장</li>
-      </ol>
+      <h1 class="main-logo">ReSpace</h1>
+      <p class="main-slogan">불편한 공간,<br>더 나은 공간으로</p>
     </div>
 
     <div class="bottom">
@@ -1245,6 +1185,8 @@ a:hover { color: var(--accent-dark); }
           <div class="loc-address loading" id="locAddress">지도를 움직여 핀을 맞춰주세요</div>
           <small id="locCoords"></small>
         </div>
+        <input class="text-input" id="detailAddress" type="text" maxlength="60"
+               aria-label="상세 위치" placeholder="상세 위치 (선택) 예: ○○초등학교 정문 앞">
         <button class="btn-primary" id="locNext" onclick="confirmLocation()" disabled>이 위치로 정하기</button>
       </div>
     </div>
@@ -1348,13 +1290,12 @@ a:hover { color: var(--accent-dark); }
           <input class="text-input" id="applicantContact" type="text" autocomplete="email">
         </div>
         <div class="field">
-          <label for="noticeMethod">희망 통지방식</label>
-          <select class="text-input" id="noticeMethod">
-            <option value="">선택 안 함</option>
-            <option>전자우편</option>
-            <option>문자메시지</option>
-            <option>서면</option>
-          </select>
+          <span class="field-label">희망 통지방식</span>
+          <div class="chips" id="noticeChips" role="group" aria-label="희망 통지방식">
+            <button type="button" class="chip" data-notice="전자우편" aria-pressed="false">전자우편</button>
+            <button type="button" class="chip" data-notice="문자메시지" aria-pressed="false">문자메시지</button>
+            <button type="button" class="chip" data-notice="서면" aria-pressed="false">서면</button>
+          </div>
         </div>
       </div>
     </details>
@@ -1437,7 +1378,10 @@ a:hover { color: var(--accent-dark); }
           </tr>
           <tr>
             <th scope="row">위치 지도</th>
-            <td colspan="3" class="media"><div class="doc-map" id="docMap"></div></td>
+            <td colspan="3" class="media">
+              <div class="doc-map" id="docMap"></div>
+              <div class="doc-items" id="docMapAddress"></div>
+            </td>
           </tr>
           <tr>
             <th scope="row">현황 및<br>문제점</th>
@@ -1457,7 +1401,6 @@ a:hover { color: var(--accent-dark); }
       <div class="doc-sign">
         <p>위와 같이 공간 개선을 제안합니다.</p>
         <p id="docSignDate"></p>
-        <p class="sign-name">제안자 <span class="sign-blank" id="docSignName"></span> (서명)</p>
       </div>
     </article>
 
@@ -1510,6 +1453,7 @@ const state = {
   lat: null,
   lng: null,
   address: "",
+  notice: "",           // 희망 통지방식
   titleEdited: false
 };
 
@@ -1916,6 +1860,17 @@ function uniqueLabels() {
   return [...new Set(state.markers.map(m => m.label))];
 }
 
+/* 예: "포트홀 처리 관련 개선 제안" */
+function autoTitle() {
+  return uniqueLabels().join(", ") + " 관련 개선 제안";
+}
+
+/* 지도 주소 + 사용자가 적은 상세 위치 */
+function fullAddress() {
+  const detail = val("detailAddress");
+  return state.address + (detail ? " (" + detail + ")" : "");
+}
+
 function fillProposal() {
   $("summaryThumb").src = state.photo || "";
 
@@ -1928,10 +1883,10 @@ function fillProposal() {
     tags.appendChild(tag);
   });
 
-  $("summaryAddress").textContent = state.address;
+  $("summaryAddress").textContent = fullAddress();
 
   if (!state.titleEdited) {
-    $("titleInput").value = uniqueLabels().join(" · ") + " 관련 공간 개선 제안";
+    $("titleInput").value = autoTitle();
   }
 }
 
@@ -1977,18 +1932,30 @@ function applicantLines() {
     ["성명", val("applicantName")],
     ["주소", val("applicantAddress")],
     ["연락처", val("applicantContact")],
-    ["희망 통지방식", val("noticeMethod")]
+    ["희망 통지방식", state.notice]
   ].filter(row => row[1]).map(row => row[0] + ": " + row[1]);
 }
 
 const TEXT_FIELDS = ["problemInput", "contentInput", "effectInput"];
+
+/* 희망 통지방식 (하나만 선택, 다시 누르면 해제) */
+function selectNotice(value) {
+  state.notice = state.notice === value ? "" : value;
+  $("noticeChips").querySelectorAll(".chip").forEach(chip => {
+    chip.setAttribute("aria-pressed", String(chip.dataset.notice === state.notice));
+  });
+}
+
+$("noticeChips").querySelectorAll(".chip").forEach(chip => {
+  chip.addEventListener("click", () => selectNotice(chip.dataset.notice));
+});
 
 
 /* =========================================
    06 미리보기 · 저장
 ========================================= */
 function proposalTitle() {
-  return val("titleInput") || uniqueLabels().join(" · ") + " 관련 공간 개선 제안";
+  return val("titleInput") || autoTitle();
 }
 
 function itemsText() {
@@ -1996,7 +1963,7 @@ function itemsText() {
 }
 
 function locationText() {
-  return state.address + "\n" + coordText(state.lat, state.lng);
+  return fullAddress() + "\n" + coordText(state.lat, state.lng);
 }
 
 function todayText() {
@@ -2043,14 +2010,14 @@ function openPreview() {
   // 제안자 정보 (비어 있으면 빈칸으로 둠)
   $("docName").textContent = val("applicantName");
   $("docContact").textContent = val("applicantContact");
-  $("docNotice").textContent = val("noticeMethod");
+  $("docNotice").textContent = state.notice;
   $("docAddress").textContent = val("applicantAddress");
   $("docDate").textContent = todayText();
 
   $("docTitle").textContent = proposalTitle();
 
   $("docLocation").innerHTML = "";
-  $("docLocation").append(state.address);
+  $("docLocation").append(fullAddress());
   const coords = document.createElement("span");
   coords.className = "doc-coords";
   coords.textContent = coordText(state.lat, state.lng);
@@ -2066,7 +2033,7 @@ function openPreview() {
   $("docEffect").textContent = val("effectInput");
 
   $("docSignDate").textContent = todayText();
-  $("docSignName").textContent = val("applicantName");
+  $("docMapAddress").textContent = fullAddress();
 
   // 사진 + 마커 (읽기 전용)
   const box = $("docPhoto");
@@ -2147,10 +2114,11 @@ function restart() {
   selectType(null);
   $("directInput").value = "";
 
-  ["titleInput", ...TEXT_FIELDS, "applicantName", "applicantAddress", "applicantContact", "noticeMethod"]
+  ["titleInput", ...TEXT_FIELDS, "applicantName", "applicantAddress", "applicantContact", "detailAddress"]
     .forEach(id => { $(id).value = ""; });
   ["problemCount", "contentCount", "effectCount"].forEach(id => { $(id).textContent = "0"; });
   document.querySelector(".fold").open = false;
+  if (state.notice) selectNotice(state.notice);
 
   go("mainScreen");
 }
@@ -2159,8 +2127,7 @@ function restart() {
 /* =========================================
    시작
 ========================================= */
-buildTypeChips();
-renderMarkers();
+buildTainingTypeChips;
 </script>
 
 </body>
